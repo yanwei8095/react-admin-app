@@ -1,0 +1,42 @@
+.login {
+  width: 100%;
+  height: 100%;
+  background-image: url(bg.jpg);
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+.login .login-header {
+  height: 80px;
+  display: flex;
+  align-items: center;
+  background-color: rgba(20, 21, 13, 0.5);
+}
+.login .login-header img {
+  width: 40px;
+  height: 40px;
+  margin: 0 15px 0 50px;
+}
+.login .login-header h1 {
+  color: #fff;
+  font-size: 30px;
+}
+.login .login-content {
+  margin: 100px auto;
+  width: 400px;
+  height: 300px;
+  background-color: #fff;
+  overflow: hidden;
+}
+.login .login-content h3 {
+  font-size: 30px;
+  font-weight: bold;
+  text-align: center;
+  margin: 20px auto;
+}
+.login .login-content .login-form {
+  width: 80%;
+  margin: 0 auto;
+}
+.login .login-content .login-form .login-form-button {
+  width: 100%;
+}
