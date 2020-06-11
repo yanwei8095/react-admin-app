@@ -5,11 +5,14 @@ import './App.less';
 
 import Login from "./pages/login";
 import Admin from "./pages/admin"
-
+import A from './test/login';
+import B from "./test/register"
 export default class App extends Component{
 	render(){
 		return( 
 			<React.Fragment>
+			<A/>
+			<B/>
 			<Switch>
 			<Route path="/login" component={Login}/>
 			<Route path="/" component={Admin}/>
