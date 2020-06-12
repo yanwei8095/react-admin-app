@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import { Form, Input, Button,message} from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
-import {reqLogin} from "../../api/index"
+import {reqLogin} from "../../api/index";
+import {setItem} from "../../utils/storage-utils";
 import logo from "./logo.png";
 import '../../assets/less/index.less'
 import './index.less'
@@ -54,6 +55,8 @@ formRef=React.createRef();
 			if(result.status===0){
 				// 提示登录成功,保存用户信息,跳转页面
 				message.success("登录成功~");
+				// 保存用户信息
+				setItem(result.data)
 				// 已经登录成功,不需要回退了
 				this.props.history.replace("/")
 			}else{
@@ -68,9 +71,15 @@ formRef=React.createRef();
 			console.log('===============表单校验失败=====================');
 	}
 
+// 表单校验规则
+	ruleFn=(name)=>{
+		return [{required: true,whitespace:true,message: `请输入${name}!`},
+						{max:12,message:`${name}不大于12位`},{min:5,message:`${name}不小于5位`},
+						{pattern:/^[a-zA-Z0-9_]+$/,message:`${name}必须由英文数字或下划线组成`}
+						]
+	}
 
 	render () {
-		
 		return (
 		<div className="login">
 			<header className="login-header">
@@ -82,18 +91,12 @@ formRef=React.createRef();
 				<Form ref={this.formRef} className="login-form" style={{rgbe:"0,0,0,.25"}} initialValues={{remember: true}} onFinish={this.onFinish} onFinishFailed={this.onFinishFailed}>
 				{/* 表单验证的规则 */}
 					<Item name="username"
-						rules={[{required: true,whitespace:true,message: '请输入用户名!'},
-						{max:12,message:"用户名不大于12位"},{min:5,message:"用户名不小于5位"},
-						{pattern:/^[a-zA-Z0-9_]+$/,message:"用户名必须由英文数字或下划线组成"}
-						]}>
+						rules={this.ruleFn("用户名")}>
 						<Input prefix={<UserOutlined style={{rgbe:"0,0,0,.25"}} className="site-form-item-icon" />} placeholder="用户名" />
 					</Item>
 					
 					{/* 自定义表单校验规则 */}
-					<Item name="password" rules={[{required: true,whitespace:true,message: '请输入密码'},
-						{max:12,message:"密码不大于12位"},{min:5,message:"密码不小于5位"},
-						{pattern:/^[a-zA-Z0-9_]+$/,message:"密码必须由英文数字或下划线组成"}
-						]}>
+					<Item name="password" rules={this.ruleFn("密码")}>
 						<Input prefix={<LockOutlined className="site-form-item-icon"/>}
 							type="password"
 							placeholder="密码"
