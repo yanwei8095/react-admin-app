@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import { Form, Input, Button} from 'antd';
+import { Form, Input, Button,message} from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
-
+import {reqLogin} from "../../api/index"
 import logo from "./logo.png";
 import '../../assets/less/index.less'
 import './index.less'
@@ -43,16 +43,29 @@ formRef=React.createRef();
 			console.log('===============表单校验失败=====================');
 		})
 	}; */
-	onFinish = (values) => {
+	onFinish = async (values) => {
 					// 校验成功
-			console.log(values)
+			// console.log(values)
+			// 发送请求
+			const{username,password}=values
+			const result=await reqLogin(username, password)
+			console.log(result)
+			// 判断是否登录成功
+			if(result.status===0){
+				// 提示登录成功,保存用户信息,跳转页面
+				message.success("登录成功~");
+				// 已经登录成功,不需要回退了
+				this.props.history.replace("/")
+			}else{
+				message.error(result.msg,2)
+			}
 		};
 
 	onFinishFailed = (err) => {	
 			// 校验失败
-			console.log('===============表单校验失败2=====================');
+			console.log('===============表单校验失败=====================');
 			console.log(err);
-			console.log('===============表单校验失败2=====================');
+			console.log('===============表单校验失败=====================');
 	}
 
 
@@ -70,7 +83,7 @@ formRef=React.createRef();
 				{/* 表单验证的规则 */}
 					<Item name="username"
 						rules={[{required: true,whitespace:true,message: '请输入用户名!'},
-						{max:12,message:"用户名必须小于12位"},{min:5,message:"用户名必须大于5位"},
+						{max:12,message:"用户名不大于12位"},{min:5,message:"用户名不小于5位"},
 						{pattern:/^[a-zA-Z0-9_]+$/,message:"用户名必须由英文数字或下划线组成"}
 						]}>
 						<Input prefix={<UserOutlined style={{rgbe:"0,0,0,.25"}} className="site-form-item-icon" />} placeholder="用户名" />
@@ -78,7 +91,7 @@ formRef=React.createRef();
 					
 					{/* 自定义表单校验规则 */}
 					<Item name="password" rules={[{required: true,whitespace:true,message: '请输入密码'},
-						{max:12,message:"密码必须小于12位"},{min:6,message:"密码必须大于6位"},
+						{max:12,message:"密码不大于12位"},{min:5,message:"密码不小于5位"},
 						{pattern:/^[a-zA-Z0-9_]+$/,message:"密码必须由英文数字或下划线组成"}
 						]}>
 						<Input prefix={<LockOutlined className="site-form-item-icon"/>}

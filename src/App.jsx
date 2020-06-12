@@ -10,10 +10,11 @@ export default class App extends Component{
 		return( 
 			<React.Fragment>
 			<Switch>
+			{/* <Route exact path="/" component={Login}/> */}
 			<Route path="/login" component={Login}/>
 			<Route path="/" component={Admin}/>
 			{/* 为了开发login组件方便而设计重定向 */}
-			<Redirect to="/login"/>
+			{/* <Redirect to="/login"/> */}
 			</Switch>
 		</React.Fragment>
 		)
