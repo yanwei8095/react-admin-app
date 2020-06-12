@@ -1,7 +1,21 @@
 import React, {Component} from 'react';
+import {Link,Route} from "react-router-dom";
+import { Layout, Breadcrumb } from 'antd';
 import {getItem} from "../../utils/storage-utils";
 import memory from "../../utils/memory-utils";
-	
+import LeftNav from "../../components/leftNav";
+import Home from "../home";
+import Category from "../category";
+import Product from "../product";
+import User from "../user";
+import Safety from "../safety";
+import Bar from "../bar";
+import Line from "../line";
+import Pie from "../pie";
+import logo from "../../assets/images/logo.png";
+
+const { Header, Content, Footer, Sider } = Layout;
+
 export default class Admin extends Component {
 	/* 
 	1.需要持久化存储用户信息-->localStorage
@@ -9,10 +23,15 @@ export default class Admin extends Component {
 	*/
 	constructor(props){
 		super(props);
+		// 定义状态
+		this.state = {
+			collapsed: false,
+		};
+
 		// 判断用户是否登录过
 		const user=getItem();
 		// 出于安全考虑,避免被注入他人的用户信息,只要user没有或user._id没有，都不能登录
-		if(!user||!uaer._id){
+		if(!user||!user._id){
 			// 说明用户没有登录过，跳转到登录页面
 			return this.props.history.replace("/login")
 		}
@@ -20,11 +39,47 @@ export default class Admin extends Component {
 		memory.user=user;
 		console.log(user)
 	}
+
+	onCollapse = collapsed => {
+		console.log(collapsed);
+		this.setState({
+			collapsed
+		});
+	};
+	
 	render () {
-		return(
-		<div>
-			<h2>Admin</h2>
-		</div>
-		)
+		const {collapsed}=this.state;
+		const opacity = collapsed ? 0 : 1;
+		return (
+      <Layout style={{ minHeight: '100vh' }}>
+        <Sider collapsible collapsed={collapsed} onCollapse={this.onCollapse}>
+					<Link to="/home" className="logo">
+						<img src={logo} alt="logo"/>
+						<h2 style={{opacity}}>优云后台</h2>
+					</Link>
+				<LeftNav/>
+          </Sider>
+        <Layout className="site-layout">
+          <Header className="site-layout-background" style={{ padding: 0 }} />
+          <Content style={{ margin: '20px' }}>
+            {/* <Breadcrumb style={{ margin: '16px 0' }}>
+              <Breadcrumb.Item>User</Breadcrumb.Item>
+              <Breadcrumb.Item>Bill</Breadcrumb.Item>
+            </Breadcrumb> */}
+            <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
+              <Route path="/home" component={Home}/>
+              <Route path="/category" component={Category}/>
+              <Route path="/product" component={Product}/>
+              <Route path="/user" component={User}/>
+              <Route path="/safety" component={Safety}/>
+              <Route path="/bar" component={Bar}/>
+              <Route path="/line" component={Line}/>
+              <Route path="/pie" component={Pie}/>
+            </div>
+          </Content>
+          <Footer style={{ textAlign: 'center' }}>推荐使用谷歌浏览器,可以获得更佳页面操作体验</Footer>
+        </Layout>
+      </Layout>
+    );
 	}
 }

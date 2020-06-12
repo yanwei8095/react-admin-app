@@ -3,7 +3,7 @@ import { Form, Input, Button,message} from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import {reqLogin} from "../../api/index";
 import {setItem} from "../../utils/storage-utils";
-import logo from "./logo.png";
+import logo from "../../assets/images/logo.png";
 import '../../assets/less/index.less'
 import './index.less'
 // const Item = Form.Item
