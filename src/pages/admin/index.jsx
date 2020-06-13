@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Link,Route} from "react-router-dom";
+import {Route} from "react-router-dom";
 import { Layout, Breadcrumb } from 'antd';
 import {getItem} from "../../utils/storage-utils";
 import memory from "../../utils/memory-utils";
@@ -12,7 +12,7 @@ import Safety from "../safety";
 import Bar from "../bar";
 import Line from "../line";
 import Pie from "../pie";
-import logo from "../../assets/images/logo.png";
+
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -37,7 +37,7 @@ export default class Admin extends Component {
 		}
 		// 在内存中存储用户信息,为了以后经常使用时性能优化
 		memory.user=user;
-		console.log(user)
+		// console.log(user)
 	}
 
 	onCollapse = collapsed => {
@@ -53,11 +53,8 @@ export default class Admin extends Component {
 		return (
       <Layout style={{ minHeight: '100vh' }}>
         <Sider collapsible collapsed={collapsed} onCollapse={this.onCollapse}>
-					<Link to="/home" className="logo">
-						<img src={logo} alt="logo"/>
-						<h2 style={{opacity}}>优云后台</h2>
-					</Link>
-				<LeftNav/>
+					
+				<LeftNav opacity={opacity}/>
           </Sider>
         <Layout className="site-layout">
           <Header className="site-layout-background" style={{ padding: 0 }} />
