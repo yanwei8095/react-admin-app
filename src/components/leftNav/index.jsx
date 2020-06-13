@@ -48,7 +48,6 @@ createItem = (item) => {
 				{
 					children.map((item)=>{
 						if(pathname===item.key){
-							{/* openKeys=[menu.key];会修改原数组openKeys=[] */}
 							openKeys.push(menu.Key);
 						}
 						return this.createItem(item)

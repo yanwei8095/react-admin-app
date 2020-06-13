@@ -4,6 +4,7 @@ import { Layout, Breadcrumb } from 'antd';
 import {getItem} from "../../utils/storage-utils";
 import memory from "../../utils/memory-utils";
 import LeftNav from "../../components/leftNav";
+import HeaderMain from "../../components/header-main";
 import Home from "../home";
 import Category from "../category";
 import Product from "../product";
@@ -12,7 +13,6 @@ import Safety from "../safety";
 import Bar from "../bar";
 import Line from "../line";
 import Pie from "../pie";
-
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -53,17 +53,18 @@ export default class Admin extends Component {
 		return (
       <Layout style={{ minHeight: '100vh' }}>
         <Sider collapsible collapsed={collapsed} onCollapse={this.onCollapse}>
-					
 				<LeftNav opacity={opacity}/>
           </Sider>
-        <Layout className="site-layout">
-          <Header className="site-layout-background" style={{ padding: 0 }} />
+        <Layout>
+          <Header style={{backgroundColor:"#fff", padding: 0,height:100}}>
+					<HeaderMain/>
+					</Header>
           <Content style={{ margin: '20px' }}>
             {/* <Breadcrumb style={{ margin: '16px 0' }}>
               <Breadcrumb.Item>User</Breadcrumb.Item>
               <Breadcrumb.Item>Bill</Breadcrumb.Item>
             </Breadcrumb> */}
-            <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
+            <div style={{ padding: 24, minHeight: 360 }}>
               <Route path="/home" component={Home}/>
               <Route path="/category" component={Category}/>
               <Route path="/product" component={Product}/>
