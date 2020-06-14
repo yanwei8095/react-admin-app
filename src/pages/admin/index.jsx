@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Route} from "react-router-dom";
+import {Route,Switch,Redirect} from "react-router-dom";
 import { Layout, Breadcrumb } from 'antd';
 import {getItem} from "../../utils/storage-utils";
 import memory from "../../utils/memory-utils";
@@ -65,6 +65,7 @@ export default class Admin extends Component {
               <Breadcrumb.Item>Bill</Breadcrumb.Item>
             </Breadcrumb> */}
             <div style={{ padding: 24, minHeight: 360 }}>
+						<Switch>
               <Route path="/home" component={Home}/>
               <Route path="/category" component={Category}/>
               <Route path="/product" component={Product}/>
@@ -73,6 +74,8 @@ export default class Admin extends Component {
               <Route path="/bar" component={Bar}/>
               <Route path="/line" component={Line}/>
               <Route path="/pie" component={Pie}/>
+							<Redirect to="/home"/>
+							</Switch>
             </div>
           </Content>
           <Footer style={{ textAlign: 'center' }}>推荐使用谷歌浏览器,可以获得更佳页面操作体验</Footer>
