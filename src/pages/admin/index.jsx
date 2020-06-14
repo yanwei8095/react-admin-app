@@ -28,16 +28,13 @@ export default class Admin extends Component {
 			collapsed: false,
 		};
 
-		// 判断用户是否登录过
+		// 在内存中存储用户信息,渲染时只需要保存一次,为了以后经常使用时性能优化
 		const user=getItem();
-		// 出于安全考虑,避免被注入他人的用户信息,只要user没有或user._id没有，都不能登录
-		if(!user||!user._id){
-			// 说明用户没有登录过，跳转到登录页面
-			return this.props.history.replace("/login")
+		if (user && user._id) {
+				memory.user = user;
+				// console.log(user)
 		}
-		// 在内存中存储用户信息,为了以后经常使用时性能优化
-		memory.user=user;
-		// console.log(user)
+
 	}
 
 	onCollapse = collapsed => {
@@ -48,6 +45,12 @@ export default class Admin extends Component {
 	};
 	
 	render () {
+		// 判断用户是否登录过，出于安全考虑,避免被注入他人的用户信息,只要user没有或user._id没有，都不能登录
+			if (!memory.user || !memory.user._id) {
+				// 说明用户没有登录过，跳转到登录页面,在constructor不能阻止渲染,在render中不能强行渲染，因为return 跳转登陆路径后，不能执行后面的流程
+				return <Redirect to="/login"/>
+				/* this.props.history.replace("/login") */
+			}
 		const {collapsed}=this.state;
 		const opacity = collapsed ? 0 : 1;
 		return (
