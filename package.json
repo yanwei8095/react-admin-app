@@ -42,5 +42,10 @@
   "devDependencies": {
     "@babel/plugin-proposal-decorators": "^7.10.1"
   },
-  "proxy": "http://localhost:5000"
+  "proxy": "http://localhost:5000",
+  "description": "react后台管理",
+  "main": "index.js",
+  "repository": "https://github.com/yanwei8095/react-admin-app.git",
+  "author": "yanwei8095 <yanwei2007095@qq.com>",
+  "license": "MIT"
 }
