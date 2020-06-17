@@ -32,5 +32,8 @@ export const reqWeather=(city)=>{
 	})
 }
 
-// 请求分类列表数据函数
+// 请求分类列表数据的函数
 export const reqGetCategories = (parentId) => axios(prefix + "/manage/category/list",{parentId})
+
+// 请求添加分类数据的函数
+export const reqAddCategory = (parentId, categoryName) => axios(prefix + "/manage/category/add",{parentId, categoryName},"post")

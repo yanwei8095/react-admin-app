@@ -9,12 +9,12 @@ import './index.less'
 // const Item = Form.Item
 const {Item} = Form;
 
-console.log('====================================');
+/* console.log('====================================');
 console.log(Form)
 console.log('====================================');
-
+ */
 export default class Login extends Component {
-formRef=React.createRef();
+// formRef=React.createRef();
 
 	/* onFinish = (values) => {
 		// 禁止表单的默认行为
@@ -31,7 +31,7 @@ formRef=React.createRef();
 		// 重置(清空)表单密码输入框
 		// const result = this.formRef.current.resetFields(["password"])
 		// console.log(result)
-		// 表单校验的方法
+		// 触发表单校验的方法
 		this.formRef.current.validateFields()
 		.then(values=>{
 			// 校验成功
@@ -50,7 +50,7 @@ formRef=React.createRef();
 			// 发送请求
 			const{username,password}=values
 			const result=await reqLogin(username, password)
-			console.log(result)
+			// console.log(result)
 			// 判断是否登录成功
 			if(result.status===0){
 				// 提示登录成功,保存用户信息,跳转页面
