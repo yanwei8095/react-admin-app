@@ -9,18 +9,23 @@ const {Option}=Select;
 		 static propTypes={
 		 categories:PropTypes.array.isRequired
 	 };
-	 formRef=React.createRef();
+	 constructor(props){
+		 super(props);
+		 this.formRef=React.createRef();
+	 }
 // 自定义表单校验
 validator =()=>{
 	const {categories} =this.props;
+	const reg=/(^\s+)|(\s+$)/g;
 	return {
 		validator(rule, value) {
 			const category = categories.find((category) => category.name === value);
 			if (!value) {
 				return Promise.reject("请输入要修改的分类名称");
 			} else if (category) {
-
 				return Promise.reject("不能与之前分类名称相同");
+			} else if (value && reg.test(value)) {
+			return Promise.reject("分类名称前后不能包含空格");
 			}
 			return Promise.resolve();
 		}
@@ -40,7 +45,7 @@ validator =()=>{
 						}
 					</Select>
 				</Item>
-				<Item label="分类名称" name="categoryName"
+				<Item label="分类名称" name="categoryName"  hasFeedback={true}
 						rules={ [{required: true,whitespace:true,message: "分类名称不能为空"},this.validator]
 						}>
 						<Input placeholder="请输入分类名称"/>

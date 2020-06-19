@@ -37,3 +37,6 @@ export const reqGetCategories = (parentId) => axios(prefix + "/manage/category/l
 
 // 请求添加分类数据的函数
 export const reqAddCategory = (parentId, categoryName) => axios(prefix + "/manage/category/add",{parentId, categoryName},"post")
+
+// 请求修改分类名称函数
+export const reqUpdateCategoryName = (categoyId, categoryName) => axios(prefix + "/manage/category/update",{categoyId, categoryName},"post")
