@@ -63,22 +63,30 @@ export default class Category extends Component {
       });
       this.changeModal("isShowUpdateCategoryNameModal", true)()
     }
-  }
+  };
+  // 初始化属性
+  isLoading=true;
   // 请求分类数据的方法
 	getCategories = async (parentId) => {
     const result = await reqGetCategories(parentId);
     // console.log(result)
 			if(result.status===0){
+        const options={};
+        if(result.data.length===0){
+          this.isLoading = false;
+          // 等当前更新完成后再调用，让下一次生效
+          setTimeout(()=>{
+            this.isLoading = true;
+          },0)
+        }
         // 请求一级分类数据
         if (parentId==='0') {
-          this.setState({
-          categories :result.data
-        })        
+          options.categories=result.data;      
         } else { // 请求二级级分类数据
-           this.setState({
-          subCategories: result.data
-        })
-      }}
+          options.subCategories=result.data;
+          }
+        this.setState(options);
+      }
       else{
         message.error(result.msg)
       }
@@ -100,7 +108,6 @@ export default class Category extends Component {
       // 触发表单验证的方法
       validateFields()
       .then(async values=>{
-        // console.log(values);//eg{parentId: "0", categoryName: "别克"}
         const {parentId,categoryName}=values;
         // 校验成功 
         // 发送请求,添加分类数据，隐藏对话框,提示添加分类成功
@@ -110,10 +117,19 @@ export default class Category extends Component {
          // 在table表格中显示添加的数据
          // 方式一:重新请求所有数据然后更新
          // 方式二:将返回值插入到数据更新(减少请求,推荐使用)
-            this.setState({
-              isShowAddCategoryModal: false,
-              categories: [...this.state.categories,result.data]
-            });
+        //  如果当前在一级分类，添加的是一级分类数据,要显示，添加的是二级分类数据,不显示，
+        //  如果当前在二级分类，添加的是一级分类数据,要插入到原数据中，添加的是二级分类数据,并且与当前一级分类数据相同的，才显示
+        if(parentId==="0"){
+          this.setState({
+            isShowAddCategoryModal: false,
+            categories: [...this.state.categories,result.data]
+          });
+        } else if (parentId===this.state.parentCategory._id){
+          this.setState({
+            isShowAddCategoryModal: false,
+            subCategories: [...this.state.subCategories, result.data]
+          })
+        }
             message.success("添加分类数据成功~");
            
        }else{
@@ -188,7 +204,14 @@ goBack=()=>{
   })
 };
 	render () {
-    const {categories,subCategories,isShowAddCategoryModal,isShowUpdateCategoryNameModal,category:{name},isShowSubCategoryModel,parentCategory}=this.state;
+    const {categories,
+      subCategories,
+      isShowAddCategoryModal,
+      isShowUpdateCategoryNameModal,
+      category:{name},
+      isShowSubCategoryModel,
+      parentCategory,
+    } = this.state;
 		return (
 		 <Card className="card" title={isShowSubCategoryModel?<div><MyButton onClick={this.goBack}>一级分类</MyButton> <ArrowRightOutlined />&nbsp;<span>{parentCategory.name}</span></div>:"一级分类列表"}  extra={<Button type="primary" onClick={this.changeModal("isShowAddCategoryModal",true)}> {<PlusOutlined />}增加品类</Button>}>
       <Table
@@ -204,6 +227,7 @@ goBack=()=>{
 				}
 			}
       rowKey="_id"
+      loading={isShowSubCategoryModel?this.isLoading&&!subCategories.length:this.isLoading&&!categories.length}
 			/>
     <Modal
       title="一级分类列表"
