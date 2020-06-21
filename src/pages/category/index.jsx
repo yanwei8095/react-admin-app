@@ -85,6 +85,7 @@ export default class Category extends Component {
         } else { // 请求二级级分类数据
           options.subCategories=result.data;
           }
+
         this.setState(options);
       }
       else{
@@ -119,20 +120,16 @@ export default class Category extends Component {
          // 方式二:将返回值插入到数据更新(减少请求,推荐使用)
         //  如果当前在一级分类，添加的是一级分类数据,要显示，添加的是二级分类数据,不显示，
         //  如果当前在二级分类，添加的是一级分类数据,要插入到原数据中，添加的是二级分类数据,并且与当前一级分类数据相同的，才显示
+        const options={isShowAddCategoryModal: false}
         if(parentId==="0"){
-          this.setState({
-            isShowAddCategoryModal: false,
-            categories: [...this.state.categories,result.data]
-          });
+          options.categories = [...this.state.categories, result.data]
         } else if (parentId===this.state.parentCategory._id){
-          this.setState({
-            isShowAddCategoryModal: false,
-            subCategories: [...this.state.subCategories, result.data]
-          })
-        }
-            message.success("添加分类数据成功~");
-           
-       }else{
+          options.categories = [...this.state.subCategories, result.data]
+        }  
+        this.setState(options);     
+         message.success("添加分类数据成功~");  
+       }
+       else{
         message.error(result.msg);
        }
       })
@@ -191,7 +188,11 @@ export default class Category extends Component {
       };
   // 切换对话框显示/隐藏的方法
   changeModal=(name,isShow)=>{
+    // 当展示修改分类名称对话框，未做修改名称隐藏对话框时也要重置表单项
     return ()=>{
+      if (name ==='isShowUpdateCategoryNameModal'&&isShow === false){
+        this.createUpdateFormRef.current.formRef.current.resetFields()
+      };
       this.setState({
         [name]:isShow
       })
