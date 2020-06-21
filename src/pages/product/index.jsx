@@ -3,6 +3,7 @@ import {Card,Table,Select,Input,Button,message} from "antd";
 import {PlusOutlined} from '@ant-design/icons';
 import {reqGetProducts} from "../../api/index"
 import MyButton from "../../components/my-button";
+import "./index.less"
 
 const {Option}= Select;
 const {Search} = Input;
@@ -11,39 +12,8 @@ export default class Product extends Component {
 		products:[],//单页产品数据数组
 		total:0,//产品总数量
 	};
-	getProducts=async(pageNum,pageSize=3)=>{
-		const result=await reqGetProducts(pageNum,pageSize);
-		if(result.status===0){
-			this.setState({
-				products:result.data.list,
-				total: result.data.total
-			})
-		}else{
-			message.error(result.msg)
-		}
-	};
-	componentDidMount(){
-		this.getProducts(1)
-	}
-	
-	render () {
-		const {products,total}=this.state;
-		const dataSource = [
-  {
-    key: '1',
-    name: '胡彦斌',
-    age: 32,
-    address: '西湖区湖底公园1号',
-  },
-  {
-    key: '2',
-    name: '胡彦祖',
-    age: 42,
-    address: '西湖区湖底公园1号',
-  },
-];
-
-const columns = [
+	// 定义在实例对象的属性上，初始化定义一次，后面即可复用
+	columns = [
   {
     title: '商品名称',
     dataIndex: 'name',
@@ -62,7 +32,7 @@ const columns = [
 	  {
 	  	title: '状态',
 	  	// dataIndex: 'address',
-			key: 'address',
+			key: 'status',
 			render:()=>{
 				return <Fragment>
 					<Button type='primary'>下架</Button>
@@ -73,7 +43,7 @@ const columns = [
 	  {
 	  	title: '操作',
 	  	// dataIndex: 'address',
-			key: 'address',
+			key: 'operator',
 				render:()=>{
 				return <Fragment>
 					<MyButton>详情</MyButton>
@@ -82,6 +52,39 @@ const columns = [
 			}
 		}, 
 	];
+	getProducts=async(pageNum,pageSize=3)=>{
+		const result=await reqGetProducts(pageNum,pageSize);
+		if(result.status===0){
+			this.setState({
+				products:result.data.list,
+				total: result.data.total
+			})
+		}else{
+			message.error(result.msg)
+		}
+	};
+	componentDidMount(){
+		this.getProducts(1)
+	}
+	
+	render () {
+		const {products,total}=this.state;
+/* 		const dataSource = [
+  {
+    key: '1',
+    name: '胡彦斌',
+    age: 32,
+    address: '西湖区湖底公园1号',
+  },
+  {
+    key: '2',
+    name: '胡彦祖',
+    age: 42,
+    address: '西湖区湖底公园1号',
+  },
+]; */
+
+
 		return (
 		<Card
 		title={<Fragment>
@@ -89,15 +92,17 @@ const columns = [
 				<Option key={0} value={0}>根据商品名称</Option>
 				<Option key={1} value={1}>根据商品描述</Option>
 			</Select>
-			<Search placeholder='关键字' style={{width:300,margin:'0 10px'}}/>
+			{/* style={{width:300,margin:'0 10px'}} */}
+			<Search placeholder='关键字' className="search"/>
 			<Button type='primary'>搜索</Button>
 		</Fragment>}
 		extra={<Button type='primary'><PlusOutlined/>添加产品</Button>} 
-		style={{ width: "100%"} }
+		// style={{ width: "100%"} }
+		className="card"
 		>
 		<Table 
 		dataSource={products} 
-		columns={columns} 
+		columns={this.columns} 
 		bordered
 		pagination={
 			{

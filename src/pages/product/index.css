@@ -1,0 +1,8 @@
+.card {
+  width: 100%;
+}
+.card .search {
+  width: 300px;
+  margin: 0 10px;
+}
+/* 当样式是一个不确定的值时候，建议在标签写成内联样式 */
