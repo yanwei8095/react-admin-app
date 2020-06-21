@@ -40,3 +40,5 @@ export const reqAddCategory = (parentId, categoryName) => axios(prefix + "/manag
 
 // 请求修改分类名称函数
 export const reqUpdateCategoryName = (categoyId, categoryName) => axios(prefix + "/manage/category/update",{categoyId, categoryName},"post")
+// 请求获取商品数据的函数
+export const reqGetProducts = (pageNum, pageSize) => axios(prefix + "/manage/product/list",{pageNum, pageSize})
