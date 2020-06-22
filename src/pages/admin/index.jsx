@@ -7,7 +7,7 @@ import LeftNav from "../../components/leftNav";
 import HeaderMain from "../../components/header-main";
 import Home from "../home";
 import Category from "../category";
-import Product from "../product";
+import Product from "../product/products";
 import User from "../user";
 import Safety from "../safety";
 import Bar from "../bar";

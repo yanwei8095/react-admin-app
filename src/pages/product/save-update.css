@@ -1,0 +1,13 @@
+.save-update-title {
+  display: flex;
+  align-items: center;
+}
+.save-update-title .save-arrow {
+  font-size: 20px;
+}
+.save-inputNumber {
+  width: 215px;
+}
+.btn {
+  margin-left: 15px;
+}
