@@ -1,7 +1,8 @@
 import React,{Component} from "react";
-import {Card,Input,Form,Cascader,InputNumber,Button,message } from "antd";
+import {Card,Input,Form,Cascader,InputNumber,Button,message} from "antd";
 import {ArrowLeftOutlined} from "@ant-design/icons";
 import {reqGetCategories} from "../../api/index";
+import RichTextEditor from "./rich-text.editor";
 import "./save-update.less";
 const {Item}=Form;
 export default class SaveUpdate extends Component{
@@ -94,17 +95,17 @@ export default class SaveUpdate extends Component{
 			>
 			<Form {...this.layout}   onFinish={onFinish}
       onFinishFailed={onFinishFailed}>
-				<Item label="商品名称" rules={[{ required: true,whitespace: true,}]}>
+				<Item label="商品名称" name="productName" rules={[{ required: true,whiteSpace: true,message:"商品名称不能为空"}]} hasFeedback={true}>
 					<Input placeholder="请输入商品名称"/>
 				</Item>
-				<Item label="商品描述">
+				<Item label="商品描述" name="desc" rules={[{ required: true,whiteSpace: true,message:"商品描述不能为空"}]} hasFeedback={true}>
 					<Input placeholder="请输入商品描述"/>
 				</Item>
 				<Item label="选择分类" 
 				wrapperCol={{
 				xs: { span: 24 },
 				sm: { span: 5},
-			}}>
+			}} name="category" rules={[{ required: true,message:"请选择商品分类"}]}>
 					<Cascader 
 					options={options} 
 					onChange={this.onChange} 
@@ -116,16 +117,19 @@ export default class SaveUpdate extends Component{
 				<Item label="商品价格"	wrapperCol={{
 					xs: { span: 24 },
 					sm: { span: 5},
-				}}>
-					<InputNumber className="save-inputNumber" defaultValue={1000}
+				}} name="prodectPrice" rules={[{ required: true,message:"请输入商品价格"}]}>
+					<InputNumber className="save-inputNumber" 
 				// 每三位就有一个逗号，以￥开头
 				formatter={value => `￥ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
 				parser={value => value.replace(/￥s?|(,*)/g, '')}
 				// onChange={this.onChange}
 			/>
 				</Item>
-				<Item label="商品详情">
-					
+				<Item label="商品详情" wrapperCol={{
+					xs: { span: 24 },
+					sm: { span: 20},
+				}}>
+					<RichTextEditor />
 				</Item>
 				<Item>
 				<Button type="primary" className="btn" htmlType="submit">提交</Button>
