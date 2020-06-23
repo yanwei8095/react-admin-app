@@ -1,7 +1,7 @@
 import React,{Component} from "react";
 import {Card,Input,Form,Cascader,InputNumber,Button,message} from "antd";
 import {ArrowLeftOutlined} from "@ant-design/icons";
-import {reqGetCategories} from "../../api/index";
+import {reqGetCategories,reqAddProducts} from "../../api/index";
 import RichTextEditor from "./rich-text.editor";
 import "./save-update.less";
 const {Item}=Form;
@@ -12,21 +12,14 @@ export default class SaveUpdate extends Component{
 			options:[]//级联选择器数据数组
 		};
 		this.richTextEditor=React.createRef();
-	}
+	};
 	goBack=()=>{
 		this.props.history.goBack()
 	};
 	 onChange=(value)=>{
 		console.log(value);
 	};
- 	onFinish = values => {
-		console.log('Success:', values);
-		console.log(this.richTextEditor.current.state.editorState.toHTML())
-	};
 
-	onFinishFailed = errorInfo => {
-		console.log('Failed:', errorInfo);
-	};
 	// 跳转Item中label占据多少列
 		layout = {
 		labelCol: {
@@ -90,8 +83,37 @@ export default class SaveUpdate extends Component{
 		targetOption.loading = true;
 		// 请求二级分类数据
 	this.getCategories(targetOption.value);
-  };
-
+	};
+	// 表单验证成功
+ 	onFinish = async values => {
+		// console.log('Success:', values);
+		// console.log(this.richTextEditor.current.state.editorState.toHTML())
+		const {category,name,price,desc}=values;
+		const detail = this.richTextEditor.current.state.editorState.toHTML();
+		let categoryId,pCategoryId;
+		if (category.length === 1) {
+			// 说明只有一级分类
+			categoryId='0';
+			pCategoryId=category[0]
+		}else{
+				// 说明有两个分类
+				categoryId = category[0];
+				pCategoryId = category[1]
+		}
+			// 发送请求
+		const result = await reqAddProducts({categoryId,pCategoryId,name,price,desc,detail});
+		if(result.status===0){
+		// 请求成功,提示用户，返回Index页面
+		message.success("添加商品成功~");
+		this.props.history.goBack()
+		}else{
+		// 请求失败
+		message.error(result.msg)
+		}
+};
+	onFinishFailed = errorInfo => {
+		console.log('Failed:', errorInfo);
+	};
 	render(){
 	const {options}=this.state;
 	
@@ -101,7 +123,7 @@ export default class SaveUpdate extends Component{
 			>
 			<Form {...this.layout}   onFinish={this.onFinish}
       onFinishFailed={this.onFinishFailed}>
-				<Item label="商品名称" name="productName" rules={[{ required: true,whiteSpace: true,message:"商品名称不能为空"}]} hasFeedback={true}>
+				<Item label="商品名称" name="name" rules={[{ required: true,whiteSpace: true,message:"商品名称不能为空"}]} hasFeedback={true}>
 					<Input placeholder="请输入商品名称"/>
 				</Item>
 				<Item label="商品描述" name="desc" rules={[{ required: true,whiteSpace: true,message:"商品描述不能为空"}]} hasFeedback={true}>
@@ -123,7 +145,7 @@ export default class SaveUpdate extends Component{
 				<Item label="商品价格"	wrapperCol={{
 					xs: { span: 24 },
 					sm: { span: 5},
-				}} name="prodectPrice" rules={[{ required: true,message:"请输入商品价格"}]}>
+				}} name="price" rules={[{ required: true,message:"请输入商品价格"}]}>
 					<InputNumber className="save-inputNumber" 
 				// 每三位就有一个逗号，以￥开头
 				formatter={value => `￥ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
