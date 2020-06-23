@@ -6,14 +6,26 @@ import RichTextEditor from "./rich-text.editor";
 import "./save-update.less";
 const {Item}=Form;
 export default class SaveUpdate extends Component{
-	state={
-		options:[]//级联选择器数据数组
-	};
+	constructor(props){
+		super(props);
+		this.state={
+			options:[]//级联选择器数据数组
+		};
+		this.richTextEditor=React.createRef();
+	}
 	goBack=()=>{
 		this.props.history.goBack()
 	};
 	 onChange=(value)=>{
 		console.log(value);
+	};
+ 	onFinish = values => {
+		console.log('Success:', values);
+		console.log(this.richTextEditor.current.state.editorState.toHTML())
+	};
+
+	onFinishFailed = errorInfo => {
+		console.log('Failed:', errorInfo);
 	};
 	// 跳转Item中label占据多少列
 		layout = {
@@ -82,19 +94,13 @@ export default class SaveUpdate extends Component{
 
 	render(){
 	const {options}=this.state;
-	const onFinish = values => {
-		console.log('Success:', values);
-	};
-
-	const onFinishFailed = errorInfo => {
-		console.log('Failed:', errorInfo);
-	};
+	
 		return (
 			< Card 
 			title={<div className="save-update-title"><ArrowLeftOutlined className="save-arrow" onClick={this.goBack}/>&nbsp;&nbsp;<span>添加商品</span></div>}
 			>
-			<Form {...this.layout}   onFinish={onFinish}
-      onFinishFailed={onFinishFailed}>
+			<Form {...this.layout}   onFinish={this.onFinish}
+      onFinishFailed={this.onFinishFailed}>
 				<Item label="商品名称" name="productName" rules={[{ required: true,whiteSpace: true,message:"商品名称不能为空"}]} hasFeedback={true}>
 					<Input placeholder="请输入商品名称"/>
 				</Item>
@@ -129,7 +135,7 @@ export default class SaveUpdate extends Component{
 					xs: { span: 24 },
 					sm: { span: 20},
 				}}>
-					<RichTextEditor />
+					<RichTextEditor ref={this.richTextEditor}/>
 				</Item>
 				<Item>
 				<Button type="primary" className="btn" htmlType="submit">提交</Button>

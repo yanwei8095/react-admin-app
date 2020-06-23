@@ -21,13 +21,13 @@ export default class RichTextEditor extends Component {
         })
     };
 //保存时触发的回调
-    submitContent = async () => {
+   /*  submitContent = async () => {
         // 在编辑器获得焦点时按下ctrl+s会执行此方法
         // 编辑器内容提交到服务端之前，可直接调用editorState.toHTML()来获取HTML格式的内容
         const htmlContent = this.state.editorState.toHTML()
 				// const result = await saveEditorContent(htmlContent)
 				console.log(htmlContent)
-    };
+    }; */
 // 内容变化时触发的回调
     handleEditorChange = (editorState) => {
         this.setState({ editorState })
@@ -40,7 +40,7 @@ export default class RichTextEditor extends Component {
                 <BraftEditor
                     value={editorState}
                     onChange={this.handleEditorChange}
-                    onSave={this.submitContent}
+                    // onSave={this.submitContent}
                 />
             </div>
         )
