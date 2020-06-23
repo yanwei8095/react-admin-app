@@ -3,6 +3,7 @@ import {Card,Input,Form,Cascader,InputNumber,Button,message} from "antd";
 import {ArrowLeftOutlined} from "@ant-design/icons";
 import {reqGetCategories,reqAddProducts} from "../../api/index";
 import RichTextEditor from "./rich-text.editor";
+import PicturesWall from "./pictures-wall";
 import "./save-update.less";
 const {Item}=Form;
 export default class SaveUpdate extends Component{
@@ -114,26 +115,36 @@ export default class SaveUpdate extends Component{
 	onFinishFailed = errorInfo => {
 		console.log('Failed:', errorInfo);
 	};
+	// 修改category初始值函数
+	composeCategory=(pCategoryId,categoryId)=>{
+		let category;
+		if (pCategoryId==='0'){
+			category=[categoryId]
+		}else{
+		category = [pCategoryId,categoryId]
+				}
+			return category;
+	};
 	render(){
 	const {options}=this.state;
-	
+	const {location:{state}}=this.props;
 		return (
 			< Card 
-			title={<div className="save-update-title"><ArrowLeftOutlined className="save-arrow" onClick={this.goBack}/>&nbsp;&nbsp;<span>添加商品</span></div>}
+			title={<div className="save-update-title"><ArrowLeftOutlined className="save-arrow" onClick={this.goBack}/>&nbsp;&nbsp;<span>{state?'修改商品':'添加商品'}</span></div>}
 			>
 			<Form {...this.layout}   onFinish={this.onFinish}
       onFinishFailed={this.onFinishFailed}>
-				<Item label="商品名称" name="name" rules={[{ required: true,whiteSpace: true,message:"商品名称不能为空"}]} hasFeedback={true}>
+				<Item label="商品名称" name="name" initialValue={state?state.name:""} rules={[{ required: true,whiteSpace: true,message:"商品名称不能为空"}]} hasFeedback={true}>
 					<Input placeholder="请输入商品名称"/>
 				</Item>
-				<Item label="商品描述" name="desc" rules={[{ required: true,whiteSpace: true,message:"商品描述不能为空"}]} hasFeedback={true}>
+				<Item label="商品描述" name="desc" initialValue={state?state.desc:""} rules={[{ required: true,whiteSpace: true,message:"商品描述不能为空"}]} hasFeedback={true}>
 					<Input placeholder="请输入商品描述"/>
 				</Item>
 				<Item label="选择分类" 
 				wrapperCol={{
 				xs: { span: 24 },
 				sm: { span: 5},
-			}} name="category" rules={[{ required: true,message:"请选择商品分类"}]}>
+			}} name="category" initialValue={state?this.composeCategory(state.pCategoryId,state.categoryId):[]} rules={[{ required: true,message:"请选择商品分类"}]}>
 					<Cascader 
 					options={options} 
 					onChange={this.onChange} 
@@ -142,7 +153,9 @@ export default class SaveUpdate extends Component{
 					changeOnSelect //当此项为 true 时，点选每级菜单选项值都会发生变化
 					/>
 				</Item>
-				<Item label="商品价格"	wrapperCol={{
+				<Item label="商品价格"	
+				initialValue={state?state.price:""}
+				wrapperCol={{
 					xs: { span: 24 },
 					sm: { span: 5},
 				}} name="price" rules={[{ required: true,message:"请输入商品价格"}]}>
@@ -153,11 +166,14 @@ export default class SaveUpdate extends Component{
 				// onChange={this.onChange}
 			/>
 				</Item>
+					{
+						state?<Item label="商品图片"><PicturesWall _id={state._id} imgs={state.imgs}/></Item>:null
+					}
 				<Item label="商品详情" wrapperCol={{
 					xs: { span: 24 },
 					sm: { span: 20},
 				}}>
-					<RichTextEditor ref={this.richTextEditor}/>
+					<RichTextEditor ref={this.richTextEditor} detail={state?state.detail:''}/>
 				</Item>
 				<Item>
 				<Button type="primary" className="btn" htmlType="submit">提交</Button>

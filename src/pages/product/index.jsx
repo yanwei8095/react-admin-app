@@ -13,6 +13,7 @@ export default class Product extends Component {
 		products:[],//单页产品数据数组
 		total:0,//产品总数量
 	};
+	
 	// 定义在实例对象的属性上，初始化定义一次，后面即可复用
 	columns = [
   {
@@ -45,14 +46,21 @@ export default class Product extends Component {
 	  	title: '操作',
 	  	// dataIndex: 'address',
 			key: 'operator',
-				render:()=>{
+				render:(product)=>{
 				return <Fragment>
 					<MyButton>详情</MyButton>
-					<MyButton>修改</MyButton>
+					<MyButton onClick={this.updataProduct(product)}>修改</MyButton>
 				</Fragment>
 			}
 		}, 
 	];
+	// 修改商品
+	updataProduct = (product) => {
+		return()=>{
+			this.props.history.push('/product/saveUpdate',product)
+		}
+	};
+	// 获取商品
 	getProducts=async(pageNum,pageSize=3)=>{
 		const result=await reqGetProducts(pageNum,pageSize);
 		if(result.status===0){
