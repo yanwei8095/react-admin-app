@@ -75,8 +75,33 @@ export default class SaveUpdate extends Component{
 	}
   }	;
 	componentDidMount(){
-		this.getCategories('0')
+		this.getCategories('0');
+		
+		const {state}=this.props.location;
+		// 有值说明是修改商品
+		if (state) {
+			const { pCategoryId,categoryId } = state;
+			if ( pCategoryId === '0' ) {
+				this.category = [categoryId]
+			} else {
+				// 请求二级分类
+				this.getCategories(pCategoryId);
+				this.category = [pCategoryId, categoryId]
+			}
+		}
 	};
+		// 修改category初始值函数
+/* 	composeCategory=(pCategoryId,categoryId)=>{
+		let category;
+		if (pCategoryId==='0'){
+			category=[categoryId]
+		}else{
+			// 请求二级分类
+			this.getCategories(pCategoryId);
+		category = [pCategoryId,categoryId]
+				}
+			return category;
+	}; */
 	// 加载二级分类数据
 	loadData = selectedOptions => {
 		const targetOption = selectedOptions[selectedOptions.length - 1];
@@ -115,16 +140,7 @@ export default class SaveUpdate extends Component{
 	onFinishFailed = errorInfo => {
 		console.log('Failed:', errorInfo);
 	};
-	// 修改category初始值函数
-	composeCategory=(pCategoryId,categoryId)=>{
-		let category;
-		if (pCategoryId==='0'){
-			category=[categoryId]
-		}else{
-		category = [pCategoryId,categoryId]
-				}
-			return category;
-	};
+
 	render(){
 	const {options}=this.state;
 	const {location:{state}}=this.props;
@@ -144,7 +160,7 @@ export default class SaveUpdate extends Component{
 				wrapperCol={{
 				xs: { span: 24 },
 				sm: { span: 5},
-			}} name="category" initialValue={state?this.composeCategory(state.pCategoryId,state.categoryId):[]} rules={[{ required: true,message:"请选择商品分类"}]}>
+			}} name="category" initialValue={state?this.category:[]} rules={[{ required: true,message:"请选择商品分类"}]}>
 					<Cascader 
 					options={options} 
 					onChange={this.onChange} 
