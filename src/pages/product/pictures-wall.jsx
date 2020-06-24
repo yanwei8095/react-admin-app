@@ -1,8 +1,9 @@
 import React,{Component} from "react";
 import PropTypes from "prop-types";
-import { Upload, Modal } from 'antd';
+import { Upload, Modal,message } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-
+import { Field } from "rc-field-form";
+import {reqDelImage} from "../../api/index"
 function getBase64(file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -11,7 +12,6 @@ function getBase64(file) {
     reader.onerror = error => reject(error);
   });
 }
-
 export default class PicturesWall extends Component {
   static propTypes={
     _id: PropTypes.string.isRequired,
@@ -48,8 +48,35 @@ export default class PicturesWall extends Component {
       previewTitle: file.name || file.url.substring(file.url.lastIndexOf('/') + 1),
     });
   };
-// 变化
-  handleChange = ({ fileList }) => this.setState({ fileList });
+// 变化,上传中、完成、失败都会调用这个函数。file 当前操作的文件对象。
+  handleChange = async({file,fileList }) => {
+    if (file.status === "done") {
+      // 图片上传完成 修改name
+      // 找到上传的图片--最后一张
+      const lastFile = fileList[fileList.length-1];
+      lastFile.name=file.response.data.name;
+      lastFile.url=file.response.data.url;
+      
+    }
+    if (file.status === "removed") {
+      // 发送请求,删除图片
+      const {name}=file;
+      const {_id}=this.props;
+      const result=await reqDelImage(name,_id);
+      if(result.status===0){
+        message.success('删除图片成功~')
+      }else{
+        message.error('删除图片失败')
+      }
+    }
+    if (file.status === "error") {
+      // 图片上传失败
+      message.error('图片上传失败')
+    }
+    this.setState({
+      fileList
+    })
+  };
 
   render() {
     const {_id} = this.props;
@@ -83,7 +110,7 @@ export default class PicturesWall extends Component {
           footer={null}
           onCancel={this.handleCancel}
         >
-          <img alt="example" style={{ width: '100%' }} src={previewImage} />
+          <img alt="example" style={{ width: '200%' }} src={previewImage} />
         </Modal>
       </div>
     );
