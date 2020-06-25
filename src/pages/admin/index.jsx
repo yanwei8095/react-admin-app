@@ -10,9 +10,8 @@ import Category from "../category";
 import Product from "../product/product.jsx";
 import User from "../user";
 import Safety from "../safety";
-import Bar from "../bar";
-import Line from "../line";
-import Pie from "../pie";
+import Charts from "../charts";
+
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -74,9 +73,7 @@ export default class Admin extends Component {
               <Route path="/product" component={Product}/>
               <Route path="/user" component={User}/>
               <Route path="/safety" component={Safety}/>
-              <Route path="/bar" component={Bar}/>
-              <Route path="/line" component={Line}/>
-              <Route path="/pie" component={Pie}/>
+              <Route path="/charts" component={Charts}/>
 							<Redirect to="/home"/>
 							</Switch>
             </div>

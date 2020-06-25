@@ -44,17 +44,17 @@ const menuList=[
 		children:[
 			{
 				title: "柱形图",
-				key: "/bar",
+				key: "/charts/bar",
 				icon: <BarChartOutlined/>
 			},
 			{
 				title: "折线图",
-				key: "/line",
+				key: "/charts/line",
 				icon: <LineChartOutlined/>
 			},
 			{
 				title: "饼图",
-				key: "/pie",
+				key: "/charts/pie",
 				icon: <PieChartOutlined/>
 			}
 		]

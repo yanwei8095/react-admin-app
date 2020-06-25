@@ -47,7 +47,7 @@ createItem = (item) => {
 				return <SubMenu key={menu.key} icon={menu.icon} title={menu.title}>
 				{
 					children.map((item)=>{
-						if(pathname.startsWith(item.key)){
+						if (pathname.startsWith(item.key) || item.key.startsWith(pathname)) {
 							openKeys.push(menu.key);
 						}
 						return this.createItem(item)

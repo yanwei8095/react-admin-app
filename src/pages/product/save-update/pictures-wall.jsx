@@ -101,6 +101,7 @@ export default class PicturesWall extends Component {
           onChange={this.handleChange}
           name='image'//发到后台的文件参数名
           data={{id:_id}}//上传所需额外参数
+          accept="image/*"
         >
           {fileList.length >= 3 ? null : uploadButton}
         </Upload>
