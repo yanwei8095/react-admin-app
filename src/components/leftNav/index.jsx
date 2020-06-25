@@ -47,8 +47,8 @@ createItem = (item) => {
 				return <SubMenu key={menu.key} icon={menu.icon} title={menu.title}>
 				{
 					children.map((item)=>{
-						if(pathname===item.key){
-							openKeys.push(menu.Key);
+						if(pathname.startsWith(item.key)){
+							openKeys.push(menu.key);
 						}
 						return this.createItem(item)
 					})
@@ -73,8 +73,12 @@ createItem = (item) => {
 
 	render () {
 		// 获取当前路径,提取props属性
-		const {location:{pathname},opacity}=this.props;
+		let {location:{pathname},opacity}=this.props;
 		// const {pathname}=location;
+		// 路径以/product开头
+		if(pathname.startsWith('/product')){
+			pathname = '/product';
+		};
 		return (
 		<Fragment>
 			<Link to="/home" className="logo" onClick={this.handleClick}>

@@ -65,7 +65,7 @@ class HeaderMain extends Component {
 				// 子菜单
 				for (let j = 0, length = children.length; j < length; j++) {
 					const item = children[j];
-					if(item.key===pathname){
+					if (pathname.startsWith(item.key)) {
 						return item.title
 					}
 				}
