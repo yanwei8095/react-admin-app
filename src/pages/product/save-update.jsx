@@ -1,7 +1,7 @@
 import React,{Component} from "react";
 import {Card,Input,Form,Cascader,InputNumber,Button,message} from "antd";
 import {ArrowLeftOutlined} from "@ant-design/icons";
-import {reqGetCategories,reqAddProducts} from "../../api/index";
+import {reqGetCategories,reqAddProducts,reqUpdateProducts} from "../../api/index";
 import RichTextEditor from "./rich-text.editor";
 import PicturesWall from "./pictures-wall";
 import "./save-update.less";
@@ -126,16 +126,27 @@ export default class SaveUpdate extends Component{
 				categoryId = category[0];
 				pCategoryId = category[1]
 		}
-			// 发送请求
-		const result = await reqAddProducts({categoryId,pCategoryId,name,price,desc,detail});
-		if(result.status===0){
-		// 请求成功,提示用户，返回Index页面
-		message.success("添加商品成功~");
-		this.props.history.goBack()
+		// 判断是添加商品还是修改商品
+		const {location:{state}}=this.props;
+		let result;
+		let msg="";
+		if (state) {
+			// 发送修改商品请求
+		result=await reqUpdateProducts({categoryId,pCategoryId,name,price,desc,detail,_id:state._id});
+		msg="修改商品成功~"
 		}else{
-		// 请求失败
-		message.error(result.msg)
-		}
+			// 发送添加商品请求
+		result = await reqAddProducts({categoryId,pCategoryId,name,price,desc,detail});
+		msg = "添加商品成功~"
+	}
+			if(result.status===0){
+			// 请求成功,提示用户，返回Index页面
+			message.success(msg);
+			this.props.history.goBack()
+			}else{
+			// 请求失败
+			message.error(result.msg)
+			}
 };
 	onFinishFailed = errorInfo => {
 		console.log('Failed:', errorInfo);
