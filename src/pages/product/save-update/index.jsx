@@ -1,7 +1,7 @@
 import React,{Component} from "react";
 import {Card,Input,Form,Cascader,InputNumber,Button,message} from "antd";
 import {ArrowLeftOutlined} from "@ant-design/icons";
-import {reqGetCategories,reqAddProducts,reqUpdateProducts} from "../../api/index";
+import {reqGetCategories,reqAddProducts,reqUpdateProducts} from "../../../api/index";
 import RichTextEditor from "./rich-text.editor";
 import PicturesWall from "./pictures-wall";
 import "./save-update.less";

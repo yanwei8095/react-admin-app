@@ -2,8 +2,8 @@ import React,{Component} from "react";
 import PropTypes from "prop-types";
 import { Upload, Modal,message } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import { Field } from "rc-field-form";
-import {reqDelImage} from "../../api/index"
+// import { Field } from "rc-field-form";
+import {reqDelImage} from "../../../api/index"
 function getBase64(file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();

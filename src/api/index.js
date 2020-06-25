@@ -48,3 +48,5 @@ export const reqAddProducts = (product) => axios(prefix + "/manage/product/add",
 export const reqDelImage = (name,id) => axios(prefix + "/manage/img/delete", {name,id}, "post");
 // 请求修改商品的函数
 export const reqUpdateProducts = (product) => axios(prefix + "/manage/product/update", product, "post");
+// 请求搜索的函数
+export const reqSearch = (data) => axios(prefix + "/manage/product/search", data);
