@@ -196,7 +196,8 @@ export default class SaveUpdate extends Component{
 					{
 						state?<Item label="商品图片"><PicturesWall _id={state._id} imgs={state.imgs}/></Item>:null
 					}
-				<Item label="商品详情" wrapperCol={{
+				<Item label="商品详情" 
+				wrapperCol={{
 					xs: { span: 24 },
 					sm: { span: 20},
 				}}>

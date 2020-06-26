@@ -68,7 +68,8 @@ export default class Product extends Component {
 			key: 'operator',
 				render:(product)=>{
 				return <Fragment>
-					<MyButton>详情</MyButton>
+				{/* 将product对象使用state传递给目标路由组件 */}
+					<MyButton onClick={()=>this.props.history.push('/product/detail',{product})}>详情</MyButton>
 					<MyButton onClick={this.updataProduct(product)}>修改</MyButton>
 				</Fragment>
 			}
