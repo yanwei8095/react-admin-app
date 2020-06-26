@@ -50,3 +50,5 @@ export const reqDelImage = (name,id) => axios(prefix + "/manage/img/delete", {na
 export const reqUpdateProducts = (product) => axios(prefix + "/manage/product/update", product, "post");
 // 请求搜索的函数
 export const reqSearch = (data) => axios(prefix + "/manage/product/search", data);
+// 请求通过分类id获取分类的函数
+export const reqCategory = (categoryId) => axios(prefix + "/manage/category/info", {categoryId});
