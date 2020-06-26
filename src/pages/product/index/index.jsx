@@ -2,7 +2,7 @@ import React, {Component,Fragment} from 'react';
 import {Link} from "react-router-dom";
 import {Card,Table,Select,Input,Button,message} from "antd";
 import {PlusOutlined} from '@ant-design/icons';
-import {reqGetProducts,reqSearch} from "../../../api/index"
+import {reqGetProducts,reqSearch,reqUpdateStatus} from "../../../api/index"
 import MyButton from "../../../components/my-button";
 import "./index.less"
 
@@ -22,11 +22,12 @@ export default class Product extends Component {
 		this.searchContentInput=React.createRef();
 	}
 	handleSelect = (value) => {
-		console.log(value);
+		// console.log(value);
 		this.setState({
 			searchType: value
 		})
 	};
+
 	// 不能使用受控组件收集表单数据,否则输入搜索内容后，不点击搜索按钮，点击分页按钮也会进行发送请求搜索，会出现bug
 /* 	handleChange = (e) => {
 		this.setState({
@@ -46,43 +47,47 @@ export default class Product extends Component {
     dataIndex: 'desc',
     key: 'desc',
 	},
-	  {
-	  	title: '价格',
-	  	dataIndex: 'price',
-	  	key: 'price',
-		}, 
-	  {
-	  	title: '状态',
-	  	// dataIndex: 'address',
-			key: 'status',
-			render:()=>{
-				return <Fragment>
-					<Button type='primary'>下架</Button>
-					&nbsp;&nbsp;在售
-				</Fragment>
-			}
-		}, 
-	  {
-	  	title: '操作',
-	  	// dataIndex: 'address',
-			key: 'operator',
-				render:(product)=>{
-				return <Fragment>
-				{/* 将product对象使用state传递给目标路由组件 */}
-					<MyButton onClick={()=>this.props.history.push('/product/detail',{product})}>详情</MyButton>
-					<MyButton onClick={this.updataProduct(product)}>修改</MyButton>
-				</Fragment>
-			}
-		}, 
+	{
+		title: '价格',
+		dataIndex: 'price',
+		key: 'price',
+	}, 
+	{
+		title: '状态',
+		// dataIndex: 'address',
+		key: 'status',
+		render:(product)=>{
+			const {status,_id}=product;
+			const newStatus = status===1?2:1;
+			return <Fragment>
+			{/* status===1代表在售,需要进行的操作是下架 */}
+				<Button type='primary' onClick={()=>this.updateStatus(_id,newStatus)}>{status===1?'下架':'上架'}</Button>
+				&nbsp;&nbsp;{status===1?'在售':'已下架'}
+			</Fragment>
+		}
+	}, 
+	{
+		title: '操作',
+		// dataIndex: 'address',
+		key: 'operator',
+			render:(product)=>{
+			return <Fragment>
+			{/* 将product对象使用state传递给目标路由组件 */}
+				<MyButton onClick={()=>this.props.history.push('/product/detail',{product})}>详情</MyButton>
+				<MyButton onClick={this.updataProduct(product)}>修改</MyButton>
+			</Fragment>
+		}
+	}, 
 	];
 	// 修改商品
 	updataProduct = (product) => {
 		return()=>{
 			this.props.history.push('/product/saveUpdate',product)
-		}
+				}
 	};
 	// 获取商品
 	getProducts=async(pageNum,pageSize=3)=>{
+	 this.pageNum=pageNum;//保存pageNum,让其他方法可以看到
 		const {searchType}=this.state;
 		const searchContent = this.searchContent;//默认情况下没有值
 		let result=null;
@@ -113,6 +118,14 @@ export default class Product extends Component {
 		this.searchContent=this.searchContentInput.current.state.value;
 		this.getProducts(1)
 	};
+		/* 更新指定商品的状态--上架,下架 */
+		updateStatus = async(productId, status) => {
+			const result = await reqUpdateStatus(productId, status);
+			if (result.status === 0) {
+				message.success('更新商品成功~');
+				this.getProducts(this.pageNum)
+			}
+		};
 	render () {
 		const {products,total}=this.state;
 /* 		const dataSource = [

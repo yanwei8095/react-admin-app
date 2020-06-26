@@ -39,16 +39,25 @@ export const reqGetCategories = (parentId) => axios(prefix + "/manage/category/l
 export const reqAddCategory = (parentId, categoryName) => axios(prefix + "/manage/category/add",{parentId, categoryName},"post")
 
 // 请求修改分类名称函数
-export const reqUpdateCategoryName = (categoyId, categoryName) => axios(prefix + "/manage/category/update",{categoyId, categoryName},"post")
+export const reqUpdateCategoryName = (categoyId, categoryName) => axios(prefix + "/manage/category/update",{categoyId, categoryName},"post");
+
 // 请求获取商品数据的函数
 export const reqGetProducts = (pageNum, pageSize) => axios(prefix + "/manage/product/list",{pageNum, pageSize});
+
 // 请求添加商品数据的函数
 export const reqAddProducts = (product) => axios(prefix + "/manage/product/add",product,"post");
+
 // 请求删除图片的函数
 export const reqDelImage = (name,id) => axios(prefix + "/manage/img/delete", {name,id}, "post");
+
 // 请求修改商品的函数
 export const reqUpdateProducts = (product) => axios(prefix + "/manage/product/update", product, "post");
+
 // 请求搜索的函数
 export const reqSearch = (data) => axios(prefix + "/manage/product/search", data);
+
 // 请求通过分类id获取分类的函数
 export const reqCategory = (categoryId) => axios(prefix + "/manage/category/info", {categoryId});
+
+// 请求更新商品状态(上架/下架)
+export const reqUpdateStatus = (productId,status) => axios(prefix + "/manage/product/updateStatus",{productId,status}, "post");
