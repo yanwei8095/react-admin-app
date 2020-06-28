@@ -9,7 +9,7 @@ import Home from "../home";
 import Category from "../category";
 import Product from "../product/product.jsx";
 import User from "../user";
-import Safety from "../safety";
+import Role from "../role";
 import Charts from "../charts";
 
 
@@ -72,7 +72,7 @@ export default class Admin extends Component {
               <Route path="/category" component={Category}/>
               <Route path="/product" component={Product}/>
               <Route path="/user" component={User}/>
-              <Route path="/safety" component={Safety}/>
+              <Route path="/role" component={Role}/>
               <Route path="/charts" component={Charts}/>
 							<Redirect to="/home"/>
 							</Switch>

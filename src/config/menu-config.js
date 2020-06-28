@@ -34,7 +34,7 @@ const menuList=[
 	},
 	{
 		title: "权限管理", 
-		key: "/safety",
+		key: "/role",
 		icon: <SafetyCertificateOutlined/>,
 	},
 	{

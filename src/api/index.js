@@ -61,3 +61,4 @@ export const reqCategory = (categoryId) => axios(prefix + "/manage/category/info
 
 // 请求更新商品状态(上架/下架)
 export const reqUpdateStatus = (productId,status) => axios(prefix + "/manage/product/updateStatus",{productId,status}, "post");
+

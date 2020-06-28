@@ -37,7 +37,7 @@ export default class Detail extends Component{
 			name1,
 			name2
 		})
-		}
+		};
 	};
 	componentDidMount(){
 		this.getCategory()
