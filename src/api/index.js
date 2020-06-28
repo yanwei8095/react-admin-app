@@ -62,3 +62,11 @@ export const reqCategory = (categoryId) => axios(prefix + "/manage/category/info
 // 请求更新商品状态(上架/下架)
 export const reqUpdateStatus = (productId,status) => axios(prefix + "/manage/product/updateStatus",{productId,status}, "post");
 
+// 请求获取权限列表函数
+export const reqRoleList = () => axios(prefix + "/manage/role/list");
+
+// 请求增加角色的函数
+export const reqAddRole = (name) => axios(prefix + "/manage/role/add",{name},"post");
+
+// 请求更新角色数据的函数
+export const reqUpdateRole = (role) => axios(prefix +"/manage/role/update",{role},"post");
