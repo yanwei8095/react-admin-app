@@ -70,3 +70,6 @@ export const reqAddRole = (name) => axios(prefix + "/manage/role/add",{name},"po
 
 // 请求更新角色数据的函数
 export const reqUpdateRole = (role) => axios(prefix +"/manage/role/update",{role},"post");
+
+// 请求获取所有用户列表的函数
+export const reqUsers = () => axios(prefix + "/manage/user/list");

@@ -5,6 +5,7 @@ import { Menu} from 'antd';
 import logo from "../../assets/images/logo.png";
 import "./index.less";
 import menuList from "../../config/menu-config";
+// import memory from "../../utils/memory-utils"
 
 const { SubMenu } = Menu;
 const {Item}=Menu;
@@ -21,8 +22,10 @@ class LeftNav extends Component {
 		super(props);
 		// 当前展开的 SubMenu 菜单项 key 数组
 		const openKeys=[];
+		// const menus=this.getMenu(menuList)
 		// 创建菜单
 		this.menus = this.createMenu(menuList, openKeys);
+		// this.menus = this.createMenu(menuList, openKeys);
 		// 初始化状态
 		this.state={
 			openKeys
@@ -34,8 +37,30 @@ createItem = (item) => {
 				<Link to={item.key}>{item.title}</Link>
 				</Item>
 };
-1
-	/* 创建菜单项的函数*/
+// 根据menuList生成过滤后的数组
+ /*  getMenu = (menuList) => {
+		// 获取当前用户权限数组
+	const {role}= memory.user.role;
+	// 生成权限数组对应的菜单项
+	 return menuList.reduce((prev,curr)=>{
+		// 判断curr的key值是否在menus数组中
+		const newMenu=menus.find((menu)=>menu===curr.key);
+		// 说明当前遍历的curr在权限数组中
+		if (newMenu){
+			const children = curr.children;
+			if (children) {
+				// 如果有children,还要判断里面的children是否在权限数组中
+			curr.children=	children.filter(item=>menus.find(menu=>menu===item.key))
+			} 
+			return [...prev, curr]
+		}
+		else{
+			// 说明当前遍历的curr不在权限数组中
+			return prev;
+		}
+	},[])
+	}; */
+	// 创建菜单项的函数
 	createMenu = (menuList, openKeys) => {
 			// 获取当前路径
 		const {pathname}=this.props.location;
@@ -59,7 +84,50 @@ createItem = (item) => {
 				return this.createItem(menu);
 			}
 		})
-	};
+	}; 
+
+
+/*  // 以上两个方法合并为一个
+  createMenu = (menuList, openKeys) => {
+		// 获取当前用户权限数组
+	const {menus}= memory.user.role;
+	const {pathname}=this.props.location;
+	// 生成权限数组对应的菜单项
+	 return menuList.reduce((prev,curr)=>{
+		// 判断curr的key值是否在menus数组中
+		const newMenu=menus.find((menu)=>menu===curr.key);
+		// 说明当前遍历的curr在权限数组中
+		if (newMenu){
+			let children = curr.children;
+			if (children) {
+				// 如果有children,还要判断里面的children是否在权限数组中
+		//	children=	children.filter(item=>menus.find(menu=>menu===item.key));
+			return [...prev,<SubMenu key={curr.key} icon={curr.icon} title={curr.title}>
+				{
+					children.reduce((previous, current) => {
+						if(menus.find((menu)=>menu===current.key)){
+							// 是否展开菜单项 
+						if (pathname.startsWith(current.key) || current.key.startsWith(pathname)) {
+							openKeys.push(curr.key);
+						}
+						return [...previous, this.createItem(current)]
+						}else{
+							return previous;
+						}
+					},[])
+				}
+					</SubMenu>]
+			} else{
+				return [...prev, this.createItem(curr)]
+			}
+		}
+		else{
+			// 说明当前遍历的curr不在权限数组中
+			return prev;
+		}
+	},[])
+	}; */
+
 	// 将openKeys赋值为空数组,以便收起所有二级菜单
 	handleClick=()=>{
 		this.setState({
