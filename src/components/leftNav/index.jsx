@@ -5,7 +5,7 @@ import { Menu} from 'antd';
 import logo from "../../assets/images/logo.png";
 import "./index.less";
 import menuList from "../../config/menu-config";
-// import memory from "../../utils/memory-utils"
+// import memory from "../../utils/memory-utils";
 
 const { SubMenu } = Menu;
 const {Item}=Menu;
@@ -23,9 +23,10 @@ class LeftNav extends Component {
 		// 当前展开的 SubMenu 菜单项 key 数组
 		const openKeys=[];
 		// const menus=this.getMenu(menuList)
+		// console.log(menus)
 		// 创建菜单
+		// this.menus = this.createMenu(menus, openKeys);
 		this.menus = this.createMenu(menuList, openKeys);
-		// this.menus = this.createMenu(menuList, openKeys);
 		// 初始化状态
 		this.state={
 			openKeys
@@ -38,10 +39,10 @@ createItem = (item) => {
 				</Item>
 };
 // 根据menuList生成过滤后的数组
- /*  getMenu = (menuList) => {
+/*   getMenu = (menuList) => {
 		// 获取当前用户权限数组
-	const {role}= memory.user.role;
-	// 生成权限数组对应的菜单项
+		const { menus}= memory.user.role;
+	// 生成权限数组对应的菜单项 
 	 return menuList.reduce((prev,curr)=>{
 		// 判断curr的key值是否在menus数组中
 		const newMenu=menus.find((menu)=>menu===curr.key);
@@ -50,7 +51,7 @@ createItem = (item) => {
 			const children = curr.children;
 			if (children) {
 				// 如果有children,还要判断里面的children是否在权限数组中
-			curr.children=	children.filter(item=>menus.find(menu=>menu===item.key))
+			curr.children=children.filter(item=>menus.find(menu=>menu===item.key))
 			} 
 			return [...prev, curr]
 		}
@@ -87,8 +88,8 @@ createItem = (item) => {
 	}; 
 
 
-/*  // 以上两个方法合并为一个
-  createMenu = (menuList, openKeys) => {
+ // 以上两个方法合并为一个
+/*   createMenu = (menuList, openKeys) => {
 		// 获取当前用户权限数组
 	const {menus}= memory.user.role;
 	const {pathname}=this.props.location;

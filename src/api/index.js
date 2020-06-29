@@ -2,13 +2,13 @@
 包含n个请求函数模块
 */
 import jsonp from "jsonp";
-import axios from "./ajax";
+import ajax from "./ajax";
 
 
 // 分辨开发环境还是生产环境
 const prefix = process.env.NODE_ENV === "development" ? "http://localhost:3000" : "http://localhost:5000"
 // 请求登录函数
-export const reqLogin=(username, password) =>axios(prefix+"/login",{username,password},"post")
+export const reqLogin=(username, password) =>ajax(prefix+"/login",{username,password},"post")
 
 // 请求天气函数
 export const reqWeather=(city)=>{
@@ -33,43 +33,46 @@ export const reqWeather=(city)=>{
 }
 
 // 请求分类列表数据的函数
-export const reqGetCategories = (parentId) => axios(prefix + "/manage/category/list",{parentId})
+export const reqGetCategories = (parentId) => ajax(prefix + "/manage/category/list",{parentId})
 
 // 请求添加分类数据的函数
-export const reqAddCategory = (parentId, categoryName) => axios(prefix + "/manage/category/add",{parentId, categoryName},"post")
+export const reqAddCategory = (parentId, categoryName) => ajax(prefix + "/manage/category/add",{parentId, categoryName},"post")
 
 // 请求修改分类名称函数
-export const reqUpdateCategoryName = (categoyId, categoryName) => axios(prefix + "/manage/category/update",{categoyId, categoryName},"post");
+export const reqUpdateCategoryName = (categoyId, categoryName) => ajax(prefix + "/manage/category/update",{categoyId, categoryName},"post");
 
 // 请求获取商品数据的函数
-export const reqGetProducts = (pageNum, pageSize) => axios(prefix + "/manage/product/list",{pageNum, pageSize});
+export const reqGetProducts = (pageNum, pageSize) => ajax(prefix + "/manage/product/list",{pageNum, pageSize});
 
 // 请求添加商品数据的函数
-export const reqAddProducts = (product) => axios(prefix + "/manage/product/add",product,"post");
+export const reqAddProducts = (product) => ajax(prefix + "/manage/product/add",product,"post");
 
 // 请求删除图片的函数
-export const reqDelImage = (name,id) => axios(prefix + "/manage/img/delete", {name,id}, "post");
+export const reqDelImage = (name,id) => ajax(prefix + "/manage/img/delete", {name,id}, "post");
 
 // 请求修改商品的函数
-export const reqUpdateProducts = (product) => axios(prefix + "/manage/product/update", product, "post");
+export const reqUpdateProducts = (product) => ajax(prefix + "/manage/product/update", product, "post");
 
 // 请求搜索的函数
-export const reqSearch = (data) => axios(prefix + "/manage/product/search", data);
+export const reqSearch = (data) => ajax(prefix + "/manage/product/search", data);
 
 // 请求通过分类id获取分类的函数
-export const reqCategory = (categoryId) => axios(prefix + "/manage/category/info", {categoryId});
+export const reqCategory = (categoryId) => ajax(prefix + "/manage/category/info", {categoryId});
 
 // 请求更新商品状态(上架/下架)
-export const reqUpdateStatus = (productId,status) => axios(prefix + "/manage/product/updateStatus",{productId,status}, "post");
+export const reqUpdateStatus = (productId,status) => ajax(prefix + "/manage/product/updateStatus",{productId,status}, "post");
 
 // 请求获取权限列表函数
-export const reqRoleList = () => axios(prefix + "/manage/role/list");
+export const reqRoleList = () => ajax(prefix + "/manage/role/list");
 
 // 请求增加角色的函数
-export const reqAddRole = (name) => axios(prefix + "/manage/role/add",{name},"post");
+export const reqAddRole = (name) => ajax(prefix + "/manage/role/add",{name},"post");
 
 // 请求更新角色数据的函数
-export const reqUpdateRole = (role) => axios(prefix +"/manage/role/update",{role},"post");
+export const reqUpdateRole = (role) => ajax(prefix +"/manage/role/update",{role},"post");
 
 // 请求获取所有用户列表的函数
-export const reqUsers = () => axios(prefix + "/manage/user/list");
+export const reqUsers = () => ajax(prefix + "/manage/user/list");
+
+//请求删除指定用户
+export const reqDelUser = (userId) => ajax(prefix +"/manage/user/delete",{userId},"post");

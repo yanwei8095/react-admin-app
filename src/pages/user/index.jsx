@@ -1,10 +1,9 @@
 import React, {Component} from 'react';
-import {Card, Button, Table, Modal} from 'antd';
+import {Card, Button, Table, Modal, message} from 'antd';
 import dayjs from "dayjs";
 
-import {reqUsers} from "../../api/index"
-import AddUserForm from './add-user-form';
-import UpdateUserForm from './update-user-form';
+import {reqUsers,reqDelUser} from "../../api/index";
+import UserForm from './user-form';
 import MyButton from '../../components/my-button';
 
 export default class Role extends Component {
@@ -15,7 +14,6 @@ export default class Role extends Component {
       roles:[],//所有角色列表
       isShow: false, //是否展示对话框
     };
-
     this.columns = [
           {
             title: '用户名',
@@ -38,15 +36,15 @@ export default class Role extends Component {
             title: '所属角色',
             dataIndex: 'role_id',
             render: (role_id) => this.roleNames[role_id]
-            // render:(role_id)=>this.state.roles.find(role=>role._id===role_id).name
+            // render:(role_id)=>this.state.roles.find(role=>role._id===role_id).name,每行都要计算一遍，效率较低
           },
           {
             title: '操作',
-            render: user => (
-            <div>
-                <MyButton name='修改'/>
-                <MyButton name='删除'/>
-              </div>
+            render: (user) => (
+              <span>
+                <MyButton>修改</MyButton>
+                <MyButton onClick={()=>this.deleteUser(user)}>删除</MyButton>
+              </span>
             )
           }
         ];
@@ -57,7 +55,25 @@ export default class Role extends Component {
       pre[role._id]=role.name
       return pre
     },{})
+    // 将roleNames作为this的属性保存，以便40line使用
     this.roleNames=roleNames
+  };
+  // 删除指定用户
+  deleteUser=(user)=>{
+   Modal.confirm({
+      title:`确认删除${user.username}吗?`,
+      onOk: async () => {
+        const result = await reqDelUser(user._id);
+        if (result.status === 0) {
+          // 提示用户删除成功
+          message.success(`删除${user.username}成功~`);
+          // 更新列表
+          this.getUsers()
+        }
+      },
+      okText:"确认",
+      cancelText:"取消"
+    })
   }
   
   
@@ -94,7 +110,7 @@ export default class Role extends Component {
           bordered
           rowKey='_id'
           pagination={{
-            defaultPageSize: 2,
+            defaultPageSize: 3,
             showSizeChanger: true,
             pageSizeOptions: ['3', '6', '9', '12'],
             showQuickJumper: true,
@@ -109,20 +125,9 @@ export default class Role extends Component {
           okText='确认'
           cancelText='取消'
         >
-         <div>创建或更新界面</div>
+        <UserForm/>
         </Modal>
   
-        <Modal
-          title="更新用户"
-          visible={isShow}
-          onOk={this.handleUpdateUser}
-          onCancel={() => this.setState({isShow: false})}
-          okText='确认'
-          cancelText='取消'
-        >
-          <UpdateUserForm/>
-        </Modal>
-        
       </Card>
     )
   }
