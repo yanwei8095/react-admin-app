@@ -74,7 +74,7 @@ export default class Login extends Component {
 // 表单校验规则
 	ruleFn=(name)=>{
 		return [{required: true,whitespace:true,message: `请输入${name}!`},
-						{max:12,message:`${name}不大于12位`},{min:5,message:`${name}不小于5位`},
+						{max:12,message:`${name}不能大于12位`},{min:5,message:`${name}不能小于5位`},
 						{pattern:/^[a-zA-Z0-9_]+$/,message:`${name}必须由英文数字或下划线组成`}
 						]
 	}

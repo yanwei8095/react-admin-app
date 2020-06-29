@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Card, Button, Table, Modal, message} from 'antd';
 import dayjs from "dayjs";
 
-import {reqUsers,reqDelUser} from "../../api/index";
+import {reqUsers,reqDelUser,reqAddUser} from "../../api/index";
 import UserForm from './user-form';
 import MyButton from '../../components/my-button';
 
@@ -14,27 +14,33 @@ export default class Role extends Component {
       roles:[],//所有角色列表
       isShow: false, //是否展示对话框
     };
+    this.userFormRef=React.createRef();
     this.columns = [
           {
             title: '用户名',
             dataIndex: 'username',
+            key: 'username'
           },
           {
             title: '邮箱',
             dataIndex: 'email',
+            key: 'email'
           },
           {
             title: '电话',
             dataIndex: 'phone',
+            key: 'phone'
           },
           {
             title: '注册时间',
             dataIndex: 'create_time',
+            key: 'create_time',
             render: time => dayjs(time).format('YYYY-MM-DD HH:mm:ss')
           },
           {
             title: '所属角色',
             dataIndex: 'role_id',
+            key: 'role_id',
             render: (role_id) => this.roleNames[role_id]
             // render:(role_id)=>this.state.roles.find(role=>role._id===role_id).name,每行都要计算一遍，效率较低
           },
@@ -78,7 +84,35 @@ export default class Role extends Component {
   
   
   //创建或更新用户的回调函数
-  addOrUpdateUser = () => {};
+  addOrUpdateUser = () => {
+    // console.log(this.userFormRef.current.uForm);
+    const {current:{validateFields,resetFields}}=this.userFormRef.current.uForm;
+    //1.表单验证,收集表单数据
+    validateFields()
+    .then(async values => {
+      // console.log(values)
+        //2.发送请求
+      const result = await reqAddUser(values);
+      if(result.status===0){
+        //3.更新表单数据,提示用户'添加用户成功',关闭对话框 
+        message.success('添加用户成功~');
+        this.getUsers();
+        this.setState({
+          isShow: false
+        });
+         // 重置表单项
+        resetFields()
+      }else{
+        message.error(result.msg)
+      }
+
+    })
+    .catch(err => { //不做处理
+      console.log(err);
+      // message.error("修改分类-表单校验失败")
+    })
+  
+  };
   getUsers=async()=>{
     const result = await reqUsers();
     if(result.status===0){
@@ -96,7 +130,7 @@ export default class Role extends Component {
  }
   
   render () {
-    const {users, isShow} = this.state;
+    const {users,roles,isShow} = this.state;
     
     return (
       <Card
@@ -125,7 +159,7 @@ export default class Role extends Component {
           okText='确认'
           cancelText='取消'
         >
-        <UserForm/>
+        <UserForm roles={roles} ref={this.userFormRef}/>
         </Modal>
   
       </Card>

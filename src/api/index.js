@@ -76,3 +76,6 @@ export const reqUsers = () => ajax(prefix + "/manage/user/list");
 
 //请求删除指定用户
 export const reqDelUser = (userId) => ajax(prefix +"/manage/user/delete",{userId},"post");
+
+//请求添加用户
+export const reqAddUser = (user) => ajax(prefix + "/manage/user/add", user, "post");
