@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Lists and Keys</title>
+</head>
+<body>
+
+<div id="root"></div>
+
+<script type="text/javascript" src="../js/react.development.js"></script>
+<script type="text/javascript" src="../js/react-dom.development.js"></script>
+<script type="text/javascript" src="../js/babel.min.js"></script>
+
+<script type="text/babel">
+// es6 class写法
+/* class Counter extends React.Component{
+  state={
+    count:0
+  }
+  handleClick=()=>{
+    this.setState({
+      conut:this.state.count ++
+    })
+  }
+  render(){
+    return (
+      <div>
+      <p>点击了{this.state.count}次</p>
+      <button onClick={this.handleClick}>点我</button>
+      </div>
+    )
+  }
+} */
+
+// 纯函数写法，函数组件中this是undefined
+function Counter(props){
+  // 数组结构赋值
+  // useState函数返回的数组，第一个参数就是状态，第二个参数就是更新状态的方法,[]中参数随便写，位置不能互换
+  const [count,setCount]=React.useState(0);
+  function handleClick(){
+    // 更新状态，再重新渲染组件
+    setCount(count+1);
+  };
+ React.useEffect(() => {
+  //  相当于ComponentDidMount和ComponentDidUpdate
+  // 一旦组件渲染完毕，就会触发当前函数(包含初始化渲染和更新)
+  const timerId=setInterval(() => {
+    //不推荐此种用法
+    document.getElementById('title').innerText='当前title时间:'+Date.now()
+  }, 1000);
+
+  return ()=>{
+// 相当于ComponentWillUnmount
+clearInterval(timerId)
+  }
+  
+ })
+  return <div>
+  <h2 id='title'>初次title的值</h2>
+    <p>点击了{count}次</p>
+    <button onClick={handleClick}>点我</button>
+  </div>
+}
+  ReactDOM.render(<Counter/>,document.getElementById("root"))
+</script>
+</body>
+</html>

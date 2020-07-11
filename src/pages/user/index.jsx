@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Card, Button, Table, Modal, message} from 'antd';
 import dayjs from "dayjs";
 
-import {reqUsers,reqDelUser,reqAddUser} from "../../api/index";
+import {reqUsers,reqDelUser,reqAddOrUpdateUser} from "../../api/index";
 import UserForm from './user-form';
 import MyButton from '../../components/my-button';
 
@@ -46,15 +46,20 @@ export default class Role extends Component {
           },
           {
             title: '操作',
+            key: 'operator',
             render: (user) => (
               <span>
-                <MyButton>修改</MyButton>
+                <MyButton onClick={()=>{this.showUpdate(user)}}>修改</MyButton>
                 <MyButton onClick={()=>this.deleteUser(user)}>删除</MyButton>
               </span>
             )
           }
         ];
-  }
+    }
+   /*  stetic static getDerivedStateFromProps(nextProps, prevState) {
+      
+    } */
+    
   // 根据role的数组,生成包含所有角色名的对象(属性名用角色id名)
   initRoleNames=(roles)=>{
     const roleNames=roles.reduce((pre,role)=>{
@@ -81,31 +86,52 @@ export default class Role extends Component {
       cancelText:"取消"
     })
   }
-  
-  
+  // 显示修改页面
+  showUpdate=(user)=>{
+   // 保存user作为this的属性,作用:1.作为修改的标识,2.显示界面时能显示user
+    this.user=user
+    this.setState({
+      isShow:true
+    })
+  };
+  // 显示添加界面
+  showAdd = () => {
+    this.user = '' //创建添加用户之时让this上user属性值为空,去除前面保存的user
+    this.setState({
+      isShow: true
+    })
+  };
+ 
   //创建或更新用户的回调函数
   addOrUpdateUser = () => {
-    // console.log(this.userFormRef.current.uForm);
+    console.log(this.userFormRef.current.uForm);
     const {current:{validateFields,resetFields}}=this.userFormRef.current.uForm;
     //1.表单验证,收集表单数据
+    // values——>user,收集的表单数据
     validateFields()
-    .then(async values => {
-      // console.log(values)
+    .then(async(user) => {
+        
+      //作为修改的标识this.user若存在，即是更新,需要给user指定_id属性
+      if(this.user){
+        user._id = this.user._id //给user添加_id属性
+      }
         //2.发送请求
-      const result = await reqAddUser(values);
+      const result = await reqAddOrUpdateUser(user);
+      // console.log(user)
       if(result.status===0){
-        //3.更新表单数据,提示用户'添加用户成功',关闭对话框 
-        message.success('添加用户成功~');
+        
+       //3.更新表单数据,提示用户'添加用户成功',关闭对话框 
+        message.success(`${this.user?'修改':'添加'}用户成功~`);
         this.getUsers();
+       
         this.setState({
           isShow: false
-        });
-         // 重置表单项
+        })
+        // 重置表单项
         resetFields()
-      }else{
+        }else{
         message.error(result.msg)
       }
-
     })
     .catch(err => { //不做处理
       console.log(err);
@@ -123,19 +149,23 @@ export default class Role extends Component {
         roles
       })
     }
-  }
-  
+  };
  componentDidMount(){
    this.getUsers()
- }
-  
+ };
+  onCancel=()=>{
+    const {current:{resetFields}}=this.userFormRef.current.uForm;
+    // 点击取消时重置表单输入框
+    resetFields()
+    this.setState({isShow: false})
+    };
   render () {
     const {users,roles,isShow} = this.state;
-    
+    const user = this.user||{};//空对象{}没有赋值给this上的属性user
     return (
       <Card
         title={
-          <Button type='primary' onClick={() => this.setState({isShow: true})}>创建用户</Button>
+          <Button type='primary' onClick={this.showAdd}>创建用户</Button>
         }
       >
         <Table
@@ -152,14 +182,14 @@ export default class Role extends Component {
         />
   
         <Modal
-          title="创建用户"
+          title={user._id?"修改用户":"创建用户"}
           visible={isShow}
           onOk={this.addOrUpdateUser}
-          onCancel={() => this.setState({isShow: false})}
+          onCancel={this.onCancel}
           okText='确认'
           cancelText='取消'
         >
-        <UserForm roles={roles} ref={this.userFormRef}/>
+        <UserForm roles={roles} ref={this.userFormRef} user={user}/>
         </Modal>
   
       </Card>

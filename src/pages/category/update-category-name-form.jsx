@@ -49,7 +49,7 @@ render () {
 				{/* <Item   name="categoryName" name={categoryName} initialValue={categoryName}  hasFeedback={true} */}
 				<Item  name={categoryName}  initialValue={categoryName} 
 				// whitespace如果字段仅包含空格则校验不通过
-				rules={ [{required: true,whitespace:true,message: "要修改的分类名称不能为空"},this.validator]
+				rules={ [{required: true,whitespace:true,message:"要修改的分类名称不能为空"},this.validator]
 						}>
 						<Input placeholder="请输入要修改的分类名称"/>
 				</Item>

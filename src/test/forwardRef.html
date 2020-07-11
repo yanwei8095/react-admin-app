@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Lists and Keys</title>
+</head>
+<body>
+
+<div id="root"></div>
+
+<script type="text/javascript" src="../js/react.development.js"></script>
+<script type="text/javascript" src="../js/react-dom.development.js"></script>
+<script type="text/javascript" src="../js/babel.min.js"></script>
+
+<script type="text/babel">
+/* React.forwardRef--用来获取纯函数组件生成的dom元素 */
+class App extends React.Component{
+  constructor(props){
+    super(props);
+    this.content=React.createRef();
+  };
+  componentDidMount(){
+  // console.log(this.content.current)//null
+  console.log(this.content.current)//<p>这是content的内容</p>
+  };
+  render(){
+    return (
+      <div>
+        <h1>App组件</h1>
+        <Content content="这是content的内容" ref={this.content} />
+      </div>
+    )
+  }
+};
+
+// 函数组件
+/* function Content(props){
+  return <p>{props.content}</p>
+}; */
+
+const Content=React.forwardRef((props,ref)=>{
+return <p ref={ref}>{props.content}</p>
+})
+  
+  ReactDOM.render(<App/>,document.getElementById('root'))
+</script>
+</body>
+</html>

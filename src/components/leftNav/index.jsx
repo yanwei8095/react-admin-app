@@ -1,4 +1,4 @@
-import React, {Component,Fragment} from 'react';
+import React, {Component,Fragment,PureComponent} from 'react';
 import PropTypes from "prop-types";
 import {Link,withRouter} from "react-router-dom"
 import { Menu} from 'antd';
@@ -14,7 +14,7 @@ const {Item}=Menu;
 withRouter作用:给非路由组件传递路由组件三个属性(history,location,match)
 */
 @withRouter
-class LeftNav extends Component {
+class LeftNav extends PureComponent {
 	static propTypes={
 		opacity: PropTypes.number.isRequired
 	}
@@ -139,8 +139,25 @@ createItem = (item) => {
 	handleOpenChange=(openKeys)=>{
 		this.setState({openKeys})
 	};
-
+	/* 
+// 减少react重新渲染的次数
+shouldComponentUpdate(newProps,newState){
+	for (let key in newProps) {
+		// 判断旧的属性和新的属性值是否相等
+		if(this.props[key]!==newProps[key]){
+			// 如果有一个不一致，就要重新渲染
+			return true;//重新渲染
+		}
+	}
+	// 判断新旧状态值是否一致
+	if(this.state.openKeys!==newState.openKeys){
+		return true;
+	}
+	// 说明属性和状态都相等，不需要重新渲染
+	return false;
+} */
 	render () {
+		console.log(666)
 		// 获取当前路径,提取props属性
 		let {location:{pathname},opacity}=this.props;
 		// const {pathname}=location;

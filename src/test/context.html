@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Lists and Keys</title>
+</head>
+<body>
+
+<div id="root"></div>
+
+<script type="text/javascript" src="../js/react.development.js"></script>
+<script type="text/javascript" src="../js/react-dom.development.js"></script>
+<script type="text/javascript" src="../js/babel.min.js"></script>
+
+<script type="text/babel">
+/* 
+1.context是什么？是一个组件通信的方式，能够避免在每一个层级手动的传递props属性，直接传给相应的组件
+2.特点：
+通常在React应用中，数据是通过props属性由上到下(由父到子)的进行传递的。
+如：爷-->父-->子-->孙。需要一层一层的传递才能得到数据
+使用context就能实现爷-->孙，从而中间组件就不用接受多余的props了
+3.作用：
+解决多层级组件通信问题(不能是兄弟组件，必须是嵌套关系的组件)
+4.使用：
+React.createContext
+const {Provider，Consumer}=React.createContext(defaultValue);
+如果上层没有匹配的Provider，defaultValue就会生效
+
+Provider：
+<div value={xxx}>
+接收一个value属性传递给Provider的后代Consumers
+一个Provider 可以联系到多个Consumers
+Consumer：
+<Consumer>{(value)=>{do something}}</Consumer>
+接收一个函数作为子节点，函数接收当前context的值并返回一个React节点
+
+5.注意：
+不要仅仅为了避免在几个层级下的组件传递props而使用context。
+它是被用于在多个层级的多个组件需要访问相同数据的情景。
+ */
+
+// 通过props传递，A组件没有使用传递的数据
+/*  class App extends React.Component{
+   state={
+     data:'hello context'
+   }
+    render(){
+      return <div>
+          <h1>App组件</h1>
+          <A data={this.state.data}/>
+        </div>
+
+    }
+  };
+ class A extends React.Component{
+    render(){
+      return  <div>
+          <h1>A组件</h1>
+          <B data={this.props.data}/>
+        </div>
+    }
+  };
+ class B extends React.Component{
+    render(){
+      return <div>
+          <h1>B组件</h1>
+          <p>{this.props.data}</p>
+        </div>
+    }
+  }; */
+
+
+// 通过context传递,init value当没有Provider时才起作用
+const {Provider,Consumer}=React.createContext('init value')
+   class App extends React.Component{
+   state={
+     data:'hello context'
+   }
+   handleClick=()=>{
+     this.setState({
+       data:'当前时间为:'+Date.now()
+     })
+   }
+    render(){
+      //value传递给子组件的值
+      return <Provider value={this.state.data}>
+          <h1>App组件</h1>
+          <button onClick={this.handleClick}>点我</button>
+          <A/>
+        </Provider>
+       /* return <div>
+          <h1>App组件</h1>
+          <A />
+        </div> */
+
+    }
+  };
+ class A extends React.Component{
+    render(){
+      return  <div>
+          <h1>A组件</h1>
+          <B/>
+        </div>
+    }
+  };
+ class B extends React.Component{
+    render(){
+      // Consumer接收一个函数作为参数
+      return <Consumer>
+      {
+        (data)=>{
+          return <div>
+          <h1>B组件</h1>
+          <p>{data}</p>
+          </div>
+        }
+      }
+        </Consumer>
+    }
+  };
+  ReactDOM.render(<App/>,document.getElementById("root"))
+</script>
+</body>
+</html>

@@ -21,7 +21,7 @@ validator =()=>{
 		validator(rule, value) {
 			const category = categories.find((category) => category.name === value);
 			if (!value) {
-				return Promise.reject("请输入要修改的分类名称");
+				return Promise.reject("请输入要增加的分类名称");
 			} else if (category) {
 				return Promise.reject("不能与之前分类名称相同");
 			} else if (value && reg.test(value)) {

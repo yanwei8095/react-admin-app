@@ -52,3 +52,6 @@ import React,{Component} from "react";
 const getDisplayName = WrappedComponent=> {
 return WrappedComponent.displayName||WrappedComponent.name||"component"
 }
+
+
+ 

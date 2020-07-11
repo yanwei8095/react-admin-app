@@ -12,6 +12,8 @@
     "braft-editor": "^2.3.9",
     "craco-less": "^1.17.0",
     "dayjs": "^1.8.28",
+    "echarts": "^4.8.0",
+    "echarts-for-react": "^2.0.16",
     "jsonp": "^0.2.1",
     "prop-types": "^15.7.2",
     "react": "^16.13.1",

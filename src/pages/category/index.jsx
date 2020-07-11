@@ -159,7 +159,7 @@ export default class Category extends Component {
           const result = await reqUpdateCategoryName(categoryId, categoryName);
           if(result.status===0){
             // 请求成功:隐藏对话框，修改显示的分类数据,提示成功
-            message.success('修改分类名称成功',2);
+            message.success('修改分类名称成功');
              let name = 'categories';
                if (isShowSubCategoryModel) {
                  name = 'subCategories'
